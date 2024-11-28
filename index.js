@@ -24,6 +24,35 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+app.get("/api/2015-12-25",function (req,res){
+  res.json({Kkipkorir:'req.query'});
+})
+
+// Handle dynamic date/time input
+app.get("/api/:date?", (req, res) => {
+  const dateParam = req.params.date;
+
+  let date;
+  if (!dateParam) {
+    // Default to current date if no date is provided
+    date = new Date();
+  } else {
+    // Try to parse the input as a date
+    date = isNaN(dateParam) ? new Date(dateParam) : new Date(parseInt(dateParam));
+  }
+
+  // Check if the date is valid
+  if (date.toString() === "Invalid Date") {
+    return res.json({ error: "Invalid Date" });
+  }
+
+  // Respond with the timestamp
+  res.json({
+    unix: date.getTime(),
+    utc: date.toUTCString(),
+  });
+});
+
 
 
 // Listen on port set in environment variable or default to 3000
